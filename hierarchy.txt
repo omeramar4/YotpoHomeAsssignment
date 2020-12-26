@@ -1,0 +1,64 @@
+food & beverages > beverages
+food & beverages > beverages > alcohol
+food & beverages > beverages > coffee
+food & beverages > beverages > juice
+food & beverages > beverages > milk
+food & beverages > beverages > soda
+food & beverages > beverages > tea
+food & beverages > beverages > water
+food & beverages > food
+food & beverages > food > bakery
+food & beverages > food > bakery > bread
+food & beverages > food > bakery > cakes
+food & beverages > food > bakery > cookies
+food & beverages > food > broths
+food & beverages > food > candy
+food & beverages > food > cereal
+food & beverages > food > cheese
+food & beverages > food > chips
+food & beverages > food > chocolate
+food & beverages > food > condiments
+food & beverages > food > dairy
+food & beverages > food > deli
+food & beverages > food > deli > cheese
+food & beverages > food > deli > sausages
+food & beverages > food > dips
+food & beverages > food > eggs
+food & beverages > food > frozen food
+food & beverages > food > fruits
+food & beverages > food > grains
+food & beverages > food > meat
+food & beverages > food > nuts
+food & beverages > food > pasta
+food & beverages > food > prepared food
+food & beverages > food > sauces
+food & beverages > food > seafood
+food & beverages > food > seasonings
+food & beverages > food > seeds
+food & beverages > food > snacks
+food & beverages > food > soups
+food & beverages > food > spices
+food & beverages > food > spreads
+food & beverages > food > vegetables
+toys & games > action figures
+toys & games > building toys
+toys & games > doll houses
+toys & games > dolls
+toys & games > educational toys
+toys & games > electronic toys
+toys & games > games
+toys & games > games > board games
+toys & games > games > card games
+toys & games > games > dexterity games
+toys & games > games > dice games
+toys & games > games > role playing games
+toys & games > games > tile games
+toys & games > games > war games
+toys & games > outdoor toys
+toys & games > plush toys
+toys & games > pretend play
+toys & games > puzzles
+toys & games > remote control toys
+toys & games > riding toys
+toys & games > stuffed animals
+toys & games > toy vehicles
