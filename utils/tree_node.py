@@ -88,7 +88,8 @@ class TreeNode:
 
         return all_data
 
-    def find_lca(self, labels: List[str], node: 'TreeNode' = None, already_found: int = 0) -> Union[Optional[str], int]:
+    def find_lca_backup(self, labels: List[str], node: 'TreeNode' = None, already_found: int = 0
+                        ) -> Union[Optional[str], int]:
         node = node or self
         num_of_elements = number_of_appeared_elements(labels, list(self.get_all_data(node)))
         if 0 < num_of_elements < len(labels):
@@ -96,7 +97,7 @@ class TreeNode:
 
         if num_of_elements == len(labels):
             for child in node.children:
-                child_data = self.find_lca(labels, child, already_found)
+                child_data = self.find_lca_backup(labels, child, already_found)
                 if isinstance(child_data, int):
                     already_found += child_data
                 if already_found == len(labels):
@@ -108,7 +109,7 @@ class TreeNode:
 
         return None
 
-    def find_lca2(self, labels: List[str], node: 'TreeNode' = None, already_found: int = 0) -> Union[Optional[str], int]:
+    def find_lca(self, labels: List[str], node: 'TreeNode' = None) -> Union[Optional[str], int]:
         node = node or self
         children_data = node.get_all_data_by_child()
         num_of_elements_found = 0
@@ -122,7 +123,7 @@ class TreeNode:
                 num_of_elements_found += num_of_elements
 
         if selected_child is not None:
-            return self.find_lca2(labels, selected_child, already_found)
+            return self.find_lca(labels, selected_child)
 
         elif num_of_elements_found == len(labels):
             return node.data

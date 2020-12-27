@@ -38,3 +38,21 @@ class TreeHierarchyManager(HierarchyManager):
         if chosen_label in self.hierarchy.get_children_data():
             chosen_label = None
         return chosen_label
+
+
+if __name__ =='__main__':
+    x = TreeHierarchyManager(hierarchy_path='/Users/oamar/Documents/Interviews/YotpoHomeAsssignment/data/hierarchy.txt')
+    a, b, c = x.detect_labels('yotpo')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels('my tasty bread')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels('board games')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels('coffee and tea')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels('cookies and candy')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels('bread and water')
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+    a, b, c = x.detect_labels("bakery and cookies omer amar cakes")
+    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')

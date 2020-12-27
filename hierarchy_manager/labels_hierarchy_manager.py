@@ -33,7 +33,7 @@ class HierarchyManager:
         Examples:
            - text = "yotpo"              =>   ( extracted_labels=[] , specific_labels=[], chosen_label=None )
            - text = "my tasty bread"     =>   ( extracted_labels=["bread"] , specific_labels=["bread"], chosen_label="bread" )
-           - text = "board games"        =>   ( extracted_labels=["games", "board_games"], specific_labels=["board games"], chosen_label="board games" )
+           - text = "board games"        =>   ( extracted_labels=["games", "board games"], specific_labels=["board games"], chosen_label="board games" )
            - text = "coffee and tea"     =>   ( extracted_labels=["coffee", "tea"], specific_labels=["coffee", "tea"], chosen_label="beverages" )
            - text = "cookies and candy"  =>   ( extracted_labels=["cookies", "candy"], specific_labels=["cookies", "candy"], chosen_label="food" )
            - text = "bread and water"    =>   ( extracted_labels=["bread", "water"], specific_labels=["bread", "water"], chosen_label=None )
@@ -52,8 +52,7 @@ class HierarchyManager:
 
         return extracted_labels, specific_labels, chosen_label
 
-    def free_text_to_search_labels(self, text: str,
-                                   ) -> List[str]:
+    def free_text_to_search_labels(self, text: str) -> List[str]:
         text_list = [t for t in text.split(' ') if t not in self._words_to_ignore]
         subsets = list(chain.from_iterable(combinations(text_list, r) for r in range(len(text_list) + 1)))
         joined_subsets = [' '.join(s) for s in subsets if len(s) > 0]
@@ -66,14 +65,3 @@ class HierarchyManager:
 
     def find_lca(self, specific_labels: List[str]) -> str:
         raise NotImplementedError
-
-
-if __name__ == '__main__':
-    hie_man = HierarchyManager(hierarchy='hierarchy.txt')
-    # x, y, z = hie_man.detect_labels("yotpo")
-    x, y, z = hie_man.detect_labels("my tasty bread")
-    x, y, z = hie_man.detect_labels("board games")
-    x, y, z = hie_man.detect_labels("coffee and tea")
-    x, y, z = hie_man.detect_labels("cookies and candy")
-    x, y, z = hie_man.detect_labels("bread and water")
-    print('')
