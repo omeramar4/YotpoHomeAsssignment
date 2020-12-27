@@ -12,6 +12,7 @@ class HierarchyManager:
     def __init__(self, *, hierarchy_path: str):
         hierarchy = get_lines_from_text_file(hierarchy_path)
         self.hierarchy = self.parse_to_structure(hierarchy)
+        self.industry_level = 1
 
     def parse_to_structure(self, hierarchy: List[str]):
         raise NotImplementedError

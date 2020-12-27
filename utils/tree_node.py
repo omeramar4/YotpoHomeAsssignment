@@ -14,6 +14,21 @@ class TreeNode:
     def get_children_data(self) -> List[str]:
         return [child.data for child in self.children]
 
+    def get_children_data_by_level(self, level: int, node: 'TreeNode' = None):
+        node = node or self
+        if level == 0:
+            return {node.data}
+        elif level == 1:
+            return_data = set(node.get_children_data())
+            return_data.add(node.data)
+            return return_data
+
+        data = {node.data}
+        for child in node.children:
+            data = data.union(node.get_children_data_by_level(level - 1, child))
+
+        return data
+
     def get_child_by_data(self, data: str) -> 'TreeNode':
         return self.children[self.get_children_data().index(data)]
 
