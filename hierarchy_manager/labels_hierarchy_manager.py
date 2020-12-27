@@ -1,32 +1,19 @@
-from tree_node import TreeNode
-from typing import Union, Tuple, List, Optional
+from typing import Tuple, List, Optional
+from itertools import chain, combinations
+from utils.utils import get_lines_from_text_file
 
 
 class HierarchyManager:
 
     _hierarchy_separator = ' > '
+    _words_to_ignore = ['and']
 
-    def __init__(self, hierarchy: Union[str, TreeNode]):
-        if type(hierarchy) == TreeNode:
-            # TODO: validate input
-            self.hierarchy = hierarchy
-        elif type(hierarchy) == str:
-            self.hierarchy = self.parse_hierarchy_text(hierarchy)
+    def __init__(self, *, hierarchy_path: str):
+        hierarchy = get_lines_from_text_file(hierarchy_path)
+        self.hierarchy = self.parse_to_structure(hierarchy)
 
-    def parse_hierarchy_text(self, hierarchy: str) -> TreeNode:
-        try:
-            with open(hierarchy, 'r') as f:
-                lines = f.read().splitlines()
-        except FileNotFoundError as e:
-            raise e
-
-        head = TreeNode('Head')
-
-        for line in lines:
-            labels = line.split(self._hierarchy_separator)
-            head.insert_new_data(labels)
-
-        return head
+    def parse_to_structure(self, hierarchy: List[str]):
+        raise NotImplementedError
 
     def detect_labels(self, text: str) -> Tuple[List[str], List[str], Optional[str]]:
         """
@@ -52,7 +39,41 @@ class HierarchyManager:
            - text = "bread and water"    =>   ( extracted_labels=["bread", "water"], specific_labels=["bread", "water"], chosen_label=None )
 
         """
-        pass
+        search_labels = self.free_text_to_search_labels(text)
 
-    def find_lca(self, *args):
-        pass
+        extracted_labels, specific_labels = self.extract_labels(search_labels)
+
+        if not specific_labels:
+            chosen_label = None
+        elif len(specific_labels) == 1:
+            chosen_label = specific_labels[0]
+        else:
+            chosen_label = self.find_lca(specific_labels)
+
+        return extracted_labels, specific_labels, chosen_label
+
+    def free_text_to_search_labels(self, text: str,
+                                   ) -> List[str]:
+        text_list = [t for t in text.split(' ') if t not in self._words_to_ignore]
+        subsets = list(chain.from_iterable(combinations(text_list, r) for r in range(len(text_list) + 1)))
+        joined_subsets = [' '.join(s) for s in subsets if len(s) > 0]
+        if text not in joined_subsets:
+            joined_subsets.append(text)
+        return joined_subsets
+
+    def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
+        raise NotImplementedError
+
+    def find_lca(self, specific_labels: List[str]) -> str:
+        raise NotImplementedError
+
+
+if __name__ == '__main__':
+    hie_man = HierarchyManager(hierarchy='hierarchy.txt')
+    # x, y, z = hie_man.detect_labels("yotpo")
+    x, y, z = hie_man.detect_labels("my tasty bread")
+    x, y, z = hie_man.detect_labels("board games")
+    x, y, z = hie_man.detect_labels("coffee and tea")
+    x, y, z = hie_man.detect_labels("cookies and candy")
+    x, y, z = hie_man.detect_labels("bread and water")
+    print('')
