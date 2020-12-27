@@ -1,0 +1,5 @@
+food & beverages > beverages
+food & beverages > food
+food & beverages > food > bakery
+food & beverages > food > bakery > cookies
+food & beverages > food > broths
