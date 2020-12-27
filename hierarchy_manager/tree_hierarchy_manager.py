@@ -20,18 +20,7 @@ class TreeHierarchyManager(HierarchyManager):
         return head
 
     def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
-
-        all_data = self.hierarchy.get_all_data_with_distinction()
-
-        # Dict[bool, Set[str]]
-        extracted_labels = [s for s in search_labels if s in all_data[True].union(all_data[False])]
-        specific_labels = [s for s in extracted_labels if s in all_data[True]]
-
-        # Dict[str, bool]
-        # extracted_labels = [s for s in joined_subsets if s in all_data.keys()]
-        # specific_labels = [s for s in extracted_labels if all_data[s]]
-
-        return extracted_labels, specific_labels
+        raise NotImplementedError
 
     def find_lca(self, specific_labels: List[str]) -> Optional[str]:
         chosen_label = self.hierarchy.find_lca(specific_labels)
@@ -40,19 +29,25 @@ class TreeHierarchyManager(HierarchyManager):
         return chosen_label
 
 
-if __name__ =='__main__':
-    x = TreeHierarchyManager(hierarchy_path='/Users/oamar/Documents/Interviews/YotpoHomeAsssignment/data/hierarchy.txt')
-    a, b, c = x.detect_labels('yotpo')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels('my tasty bread')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels('board games')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels('coffee and tea')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels('cookies and candy')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels('bread and water')
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
-    a, b, c = x.detect_labels("bakery and cookies omer amar cakes")
-    print(f'extracted labels: {a}, specific labels: {b}, chosen label: {c}')
+class TreeHierarchyManagerFormatOne(TreeHierarchyManager):  # Dict[bool, Set[str]]
+
+    def __init__(self, *, hierarchy_path: str):
+        super().__init__(hierarchy_path=hierarchy_path)
+
+    def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
+        all_data = self.hierarchy.get_all_data_with_distinction()
+        extracted_labels = [s for s in search_labels if s in all_data[True].union(all_data[False])]
+        specific_labels = [s for s in extracted_labels if s in all_data[True]]
+        return extracted_labels, specific_labels
+
+
+class TreeHierarchyManagerFormatTwo(TreeHierarchyManager):  # Dict[str, bool]
+
+    def __init__(self, *, hierarchy_path: str):
+        super().__init__(hierarchy_path=hierarchy_path)
+
+    def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
+        all_data = self.hierarchy.get_all_data_with_distinction_label_as_key()
+        extracted_labels = [s for s in search_labels if s in all_data.keys()]
+        specific_labels = [s for s in extracted_labels if all_data[s]]
+        return extracted_labels, specific_labels

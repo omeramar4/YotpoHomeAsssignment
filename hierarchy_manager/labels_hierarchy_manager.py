@@ -1,6 +1,7 @@
 from typing import Tuple, List, Optional
 from itertools import chain, combinations
 from utils.utils import get_lines_from_text_file
+from utils.decorators import timing_decorator
 
 
 class HierarchyManager:
@@ -15,6 +16,7 @@ class HierarchyManager:
     def parse_to_structure(self, hierarchy: List[str]):
         raise NotImplementedError
 
+    @timing_decorator
     def detect_labels(self, text: str) -> Tuple[List[str], List[str], Optional[str]]:
         """
         The function receives a string and extracts all of the labels that occur within the string.
