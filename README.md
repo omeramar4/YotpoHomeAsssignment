@@ -7,33 +7,28 @@ Extraction and manipulations of labels in a product hierarchy:
 ### Clone the Repository
 
 ```
-git clone https://github.com/omeramar4/SeetreeHomeAssignment.git
+git clone https://github.com/omeramar4/YotpoHomeAsssignment.git
 ```
 
 ### Inside the Main Directory
 
-Create a Virtual Environment
+Create a virtual environment
 
 ```
 python -m venv myvenv
 ```
 
-Activate the Virtual Environment
+Activate the virtual environment
 
 ```
 source myvenv/bin/activate
 ```
 
-Install Requirements
+Install requirements
 
 ```
 pip install -r requirements.txt
 ```
 
-Navigate to `app` and Run the Application
+Navigate to `runners` and run the application with one of the implemented data structures.
 
-```
-python app.py
-```
-
-Open your Web Browser and navigate to `http://127.0.0.1:5000/`.
