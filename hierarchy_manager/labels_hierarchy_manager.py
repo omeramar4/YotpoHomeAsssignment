@@ -74,7 +74,7 @@ class HierarchyManager:
         joined_subsets = [' '.join(s) for s in subsets if len(s) > 0]
         if text not in joined_subsets:
             joined_subsets.append(text)
-        return joined_subsets
+        return list(set(joined_subsets))        # prevent repeated elements
 
     def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
         """

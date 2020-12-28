@@ -183,11 +183,7 @@ class TreeNode:
 
         return None
 
-    # This function returns pointer to LCA of two given
-    # values n1 and n2
-    # This function assumes that n1 and n2 are present in
-    # Binary Tree
-    def find_lca(self, labels: List[str]):
+    def find_lca(self, labels: List[str]) -> Optional['TreeNode']:
         if True in [self.data == label for label in labels]:
             return self
 
