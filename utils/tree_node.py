@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import List, Set, Dict, Union, Optional
 from utils.utils import number_of_appeared_elements
 
@@ -14,75 +15,69 @@ class TreeNode:
     def get_children_data(self) -> List[str]:
         return [child.data for child in self.children]
 
-    def get_children_data_by_level(self, level: int, node: 'TreeNode' = None):
-        node = node or self
+    def get_children_data_by_level(self, level: int,):
         if level == 0:
-            return {node.data}
+            return {self.data}
         elif level == 1:
-            return_data = set(node.get_children_data())
-            return_data.add(node.data)
+            return_data = set(self.get_children_data())
+            return_data.add(self.data)
             return return_data
 
-        data = {node.data}
-        for child in node.children:
-            data = data.union(node.get_children_data_by_level(level - 1, child))
+        data = {self.data}
+        for child in self.children:
+            data = data.union(child.get_children_data_by_level(level - 1))
 
         return data
 
     def get_child_by_data(self, data: str) -> 'TreeNode':
         return self.children[self.get_children_data().index(data)]
 
-    def insert_new_data(self, row: List[str], node: 'TreeNode' = None):
-        node = node or self
-        children_data = node.get_children_data()
+    def insert_new_data(self, row: List[str]):
+        children_data = self.get_children_data()
         if len(row) == 1 and row not in children_data:
-            node.add_child(TreeNode(row[0]))
+            self.add_child(TreeNode(row[0]))
             return
 
         if row[0] not in children_data:
-            node.add_child(TreeNode(row[0]))
-            next_node = node.children[-1]
+            self.add_child(TreeNode(row[0]))
+            next_node = self.children[-1]
         else:
-            next_node = node.get_child_by_data(row[0])
+            next_node = self.get_child_by_data(row[0])
 
-        self.insert_new_data(row[1:], next_node)
+        next_node.insert_new_data(row[1:])
 
-    def get_all_data(self, node: 'TreeNode' = None) -> Set[str]:
-        node = node or self
-        if not node.children:
-            return {node.data}
+    def get_all_data(self) -> Set[str]:
+        if not self.children:
+            return {self.data}
 
         children_data = set()
-        for child in node.children:
-            children_data = children_data.union(self.get_all_data(child))
+        for child in self.children:
+            children_data = children_data.union(child.get_all_data())
 
-        children_data.add(node.data)
+        children_data.add(self.data)
         return children_data
 
     def get_all_data_by_child(self) -> List[Set[str]]:
         children_data = list()
         for child in self.children:
-            children_data.append(self.get_all_data(child))
+            children_data.append(child.get_all_data())
         return children_data
 
-    def get_all_data_with_distinction(self, node: 'TreeNode' = None,
-                                      return_value: Dict[bool, Set[str]] = None
+    def get_all_data_with_distinction(self, return_value: Dict[bool, Set[str]] = None
                                       ) -> Dict[bool, Set[str]]:
-        node = node or self
-
         if return_value is not None and False in return_value.keys():
-            return_value[False].add(node.data)
+            return_value[False].add(self.data)
         if return_value is None:
-            return_value = {False: {node.data}}
+            return_value = {False: {self.data}}
 
-        for child in node.children:
+        for child in self.children:
             if not child.children:
                 if True in return_value.keys():
                     return_value[True].add(child.data)
                 else:
                     return_value[True] = {child.data}
                 continue
-            child_data = self.get_all_data_with_distinction(child, return_value)
+            child_data = child.get_all_data_with_distinction(return_value)
             if True in return_value.keys():
                 return_value[True] = return_value[True].union(child_data[True])
             else:
@@ -91,32 +86,29 @@ class TreeNode:
 
         return return_value
 
-    def get_all_data_with_distinction_label_as_key(self, node: 'TreeNode' = None
-                                                   ) -> Dict[str, bool]:
-        node = node or self
-        if not node.children:
-            return {node.data: True}
+    def get_all_data_with_distinction_label_as_key(self) -> Dict[str, bool]:
+        if not self.children:
+            return {self.data: True}
 
-        all_data = {node.data: False}
-        for child in node.children:
-            all_data.update(self.get_all_data_with_distinction_label_as_key(child))
+        all_data = {self.data: False}
+        for child in self.children:
+            all_data.update(child.get_all_data_with_distinction_label_as_key())
 
         return all_data
 
-    def find_lca_backup(self, labels: List[str], node: 'TreeNode' = None, already_found: int = 0
+    def find_lca_backup(self, labels: List[str], already_found: int = 0
                         ) -> Union[Optional[str], int]:
-        node = node or self
-        num_of_elements = number_of_appeared_elements(labels, list(self.get_all_data(node)))
+        num_of_elements = number_of_appeared_elements(labels, list(self.get_all_data()))
         if 0 < num_of_elements < len(labels):
             return num_of_elements
 
         if num_of_elements == len(labels):
-            for child in node.children:
-                child_data = self.find_lca_backup(labels, child, already_found)
+            for child in self.children:
+                child_data = child.find_lca_backup(labels, already_found)
                 if isinstance(child_data, int):
                     already_found += child_data
                 if already_found == len(labels):
-                    return node.data
+                    return self.data
                 if isinstance(child_data, str):
                     return child_data
         else:
@@ -124,12 +116,11 @@ class TreeNode:
 
         return None
 
-    def find_lca(self, labels: List[str], node: 'TreeNode' = None) -> Union[Optional[str], int]:
-        node = node or self
-        children_data = node.get_all_data_by_child()
+    def find_lca(self, labels: List[str]) -> Union[Optional[str], int]:
+        children_data = self.get_all_data_by_child()
         num_of_elements_found = 0
         selected_child = None
-        for child, child_data in zip(node.children, children_data):
+        for child, child_data in zip(self.children, children_data):
             num_of_elements = number_of_appeared_elements(labels, list(child_data))
             if num_of_elements == len(labels):
                 selected_child = child
@@ -138,9 +129,9 @@ class TreeNode:
                 num_of_elements_found += num_of_elements
 
         if selected_child is not None:
-            return self.find_lca(labels, selected_child)
+            return selected_child.find_lca(labels)
 
         elif num_of_elements_found == len(labels):
-            return node.data
+            return self.data
 
         return None
