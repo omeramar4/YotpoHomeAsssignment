@@ -1,7 +1,9 @@
+import os
+from pathlib import Path
 from hierarchy_manager.dataframe_hierarchy_manager import DataFrameHierarchyManager
 
 
-path = '/Users/oamar/Documents/Interviews/YotpoHomeAsssignment/data/hierarchy.txt'
+path = os.path.join(Path(os.getcwd()).parent, 'data/hierarchy.txt')
 hm = DataFrameHierarchyManager(hierarchy_path=path)
 
 extracted_labels, specific_labels, chosen_label = hm.detect_labels('yotpo')

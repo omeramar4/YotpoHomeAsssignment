@@ -1,7 +1,9 @@
+import os
+from pathlib import Path
 from hierarchy_manager.tree_hierarchy_manager import TreeHierarchyManagerFormatOne
 
 
-path = '/Users/oamar/Documents/Interviews/YotpoHomeAsssignment/data/hierarchy.txt'
+path = os.path.join(Path(os.getcwd()).parent, 'data/hierarchy.txt')
 hm = TreeHierarchyManagerFormatOne(hierarchy_path=path)
 
 extracted_labels, specific_labels, chosen_label = hm.detect_labels('yotpo')
