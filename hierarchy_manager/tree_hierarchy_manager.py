@@ -23,7 +23,8 @@ class TreeHierarchyManager(HierarchyManager):
         raise NotImplementedError
 
     def find_lca(self, specific_labels: List[str]) -> Optional[str]:
-        chosen_label = self.hierarchy.find_lca(specific_labels)
+        chosen_node = self.hierarchy.find_lca(specific_labels)
+        chosen_label = chosen_node.data
         if chosen_label in self.hierarchy.get_children_data_by_level(self.industry_level):
             chosen_label = None
         return chosen_label
