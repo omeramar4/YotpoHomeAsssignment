@@ -1,13 +1,13 @@
 from typing import Tuple, List, Optional
 from itertools import chain, combinations
-from utils.utils import get_lines_from_text_file
 from utils.decorators import timing_decorator
+from utils.utils import get_lines_from_text_file
 
 
 class HierarchyManager:
 
     _hierarchy_separator = ' > '
-    _words_to_ignore = ['and']
+    _words_to_ignore = ['and', 'or']
 
     def __init__(self, *, hierarchy_path: str):
         hierarchy = get_lines_from_text_file(hierarchy_path)
@@ -15,6 +15,12 @@ class HierarchyManager:
         self.industry_level = 1
 
     def parse_to_structure(self, hierarchy: List[str]):
+        """
+            Parse the text file to the correct data structure.
+
+            :param hierarchy: A list of rows in the text file.
+            :return: The data structure in ReturnType of inheritors.
+        """
         raise NotImplementedError
 
     @timing_decorator
@@ -56,6 +62,13 @@ class HierarchyManager:
         return extracted_labels, specific_labels, chosen_label
 
     def free_text_to_search_labels(self, text: str) -> List[str]:
+        """
+            This functions gets free text and creates all possible subsets.
+
+            :param text: Free text containing labels.
+
+            :return: A list of the text itself and all possible subsets.
+        """
         text_list = [t for t in text.split(' ') if t not in self._words_to_ignore]
         subsets = list(chain.from_iterable(combinations(text_list, r) for r in range(len(text_list) + 1)))
         joined_subsets = [' '.join(s) for s in subsets if len(s) > 0]
@@ -64,7 +77,19 @@ class HierarchyManager:
         return joined_subsets
 
     def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
+        """
+            Extracts the labels from the list of subsets.
+
+            :param search_labels: The labels to search.
+            :return: A list of the extracted labels.
+        """
         raise NotImplementedError
 
     def find_lca(self, specific_labels: List[str]) -> str:
+        f"""
+            Finds the LCA of all labels in {specific_labels}
+            
+            :param specific_labels: Labels for which the LCA is searched.
+            :return: The LCA label.
+        """
         raise NotImplementedError
