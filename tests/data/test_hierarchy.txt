@@ -1,4 +1,5 @@
 food & beverages > beverages
+food & beverages > beverages > water
 food & beverages > food
 food & beverages > food > bakery
 food & beverages > food > bakery > cookies
