@@ -7,7 +7,7 @@ from utils.utils import get_lines_from_text_file
 class HierarchyManager:
 
     _hierarchy_separator = ' > '
-    _words_to_ignore = ['and', 'or']
+    _distinction_word = 'and'
 
     def __init__(self, *, hierarchy_path: str):
         hierarchy = get_lines_from_text_file(hierarchy_path)
@@ -69,11 +69,16 @@ class HierarchyManager:
 
             :return: A list of the text itself and all possible subsets.
         """
-        text_list = [t for t in text.split(' ') if t not in self._words_to_ignore]
-        subsets = list(chain.from_iterable(combinations(text_list, r) for r in range(len(text_list) + 1)))
-        joined_subsets = [' '.join(s) for s in subsets if len(s) > 0]
-        if text not in joined_subsets:
-            joined_subsets.append(text)
+        candidates = text.split(self._distinction_word)
+        candidates = [c.strip() for c in candidates]
+
+        joined_subsets = list()
+        for c in candidates:
+            text_list = [t for t in c.split(' ') if t not in self._distinction_word]
+            subsets = list(chain.from_iterable(combinations(text_list, r) for r in range(len(text_list) + 1)))
+            joined_subsets += [' '.join(s) for s in subsets if len(s) > 0]
+
+        joined_subsets.append(text)
         return list(set(joined_subsets))        # prevent repeated elements
 
     def extract_labels(self, search_labels: List[str]) -> Tuple[List[str], List[str]]:
