@@ -143,27 +143,29 @@ class TreeNode:
 
         return all_data
 
-    def find_lca_backup(self, labels: List[str], already_found: int = 0
-                        ) -> Union[Optional[str], int]:
-        num_of_elements = number_of_appeared_elements(labels, list(self.get_all_data()))
-        if 0 < num_of_elements < len(labels):
-            return num_of_elements
+    def find_lca(self, labels: List[str]) -> Union[str, int]:
+        if True in [self.data == label for label in labels]:
+            return 1
 
-        if num_of_elements == len(labels):
-            for child in self.children:
-                child_data = child.find_lca_backup(labels, already_found)
-                if isinstance(child_data, int):
-                    already_found += child_data
-                if already_found == len(labels):
-                    return self.data
-                if isinstance(child_data, str):
-                    return child_data
-        else:
+        if not self.children:
             return 0
 
-        return None
+        found = 0
+        for child in self.children:
+            child_lca = child.find_lca(labels)
+            if isinstance(child_lca, str):
+                return child_lca
+            else:
+                found += child_lca
+            if found == len(labels):
+                break
 
-    def find_lca_original(self, labels: List[str]) -> Union[Optional[str], int]:
+        if found == len(labels):
+            return self.data
+        else:
+            return found
+
+    def find_lca_backup(self, labels: List[str]) -> Union[Optional[str], int]:
         children_data = self.get_all_data_by_child()
         num_of_elements_found = 0
         selected_child = None
@@ -176,33 +178,31 @@ class TreeNode:
                 num_of_elements_found += num_of_elements
 
         if selected_child is not None:
-            return selected_child.find_lca(labels)
+            return selected_child.find_lca_backup(labels)
 
         elif num_of_elements_found == len(labels):
             return self.data
 
         return None
 
-    def find_lca(self, labels: List[str]) -> Optional['TreeNode']:
-        if True in [self.data == label for label in labels]:
-            return self
+    def find_lca_backup_2(self, labels: List[str], already_found: int = 0
+                          ) -> Union[Optional[str], int]:
+        num_of_elements = number_of_appeared_elements(labels, list(self.get_all_data()))
+        if 0 < num_of_elements < len(labels):
+            return num_of_elements
 
-        if not self.children:
-            return None
+        if num_of_elements == len(labels):
+            for child in self.children:
+                child_data = child.find_lca_backup_2(labels, already_found)
+                if isinstance(child_data, int):
+                    already_found += child_data
+                if already_found == len(labels):
+                    return self.data
+                if isinstance(child_data, str):
+                    return child_data
+        else:
+            return 0
 
-        children_lca = [child.find_lca(labels) for child in self.children]
+        return None
 
-        if len(children_lca) == 1 and children_lca[0] is not None:
-            return children_lca[0]
 
-        if reduce(lambda c1, c2: c1 and c2, children_lca):
-            return self
-
-        lca_child = list(filter(partial(is_not, None), children_lca))
-        if not lca_child:
-            return None
-
-        if len(lca_child) == len(labels):
-            return self
-
-        return lca_child[0]

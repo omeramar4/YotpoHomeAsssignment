@@ -35,7 +35,7 @@ print(f'extracted labels: {extracted_labels}, '
       f'specific labels: {specific_labels}, '
       f'chosen label: {chosen_label}')
 
-extracted_labels, specific_labels, chosen_label = hm.detect_labels("bakery and cookies omer amar cakes")
+extracted_labels, specific_labels, chosen_label = hm.detect_labels("bakery and cookies and cakes")
 print(f'extracted labels: {extracted_labels}, '
       f'specific labels: {specific_labels}, '
       f'chosen label: {chosen_label}')
